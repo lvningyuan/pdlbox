@@ -1,0 +1,46 @@
+class Solution {
+public:
+    bool isValid(string s) 
+    {
+        int len =s.size();
+        if(len==0)
+        return true;
+
+        string a[]={"()","{}","[]"};
+        for(int i=0;i<len ;++i)
+        {
+            int flag=0;
+          for(int j=0;j<3;++j)
+          {
+             if(s[i]==a[j][0])
+             {
+                 s1.push(a[j][1]);//you
+                 flag=1;
+                 break;
+             } 
+          }
+           if(flag==0)//NO . left
+           {
+               if(!s1.empty() && s1.top()==s[i])
+               {
+                   s1.pop();
+               }
+               else
+               return false;
+           }
+             //if(s[i]==a[j][1])
+             //{
+              //   s1.push(s[i]);//you
+               //  s2.push(a[j][0]);//zuo
+               //  break;
+                //}
+        }
+          if(s1.empty())
+          return true;
+          else
+          return false;
+    }
+    private:
+    stack<char>s1;
+    //stack<char>s2;
+};
