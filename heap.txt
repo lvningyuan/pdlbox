@@ -1,0 +1,174 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
+typedef int HPDataType;
+typedef struct Heap
+{
+  HPDataType* _a;
+  int _size;//当前有效元素的下一个
+  int _capacity; 
+
+}Heap;
+
+
+void Swap(HPDataType* a,HPDataType* b)
+{
+  HPDataType tmp=*a;
+  *a=*b;
+  *b=tmp;
+}
+
+
+
+
+// 删除向上调整
+
+void AdjustUp(Heap* hp)
+{
+  assert(hp);
+  int child = hp->_size;
+  int parent =(child-1)/2;
+  while(child)
+  {
+    if(hp->_a[child]  < hp->_a[child+1])
+      ++child;
+    if(hp->_a[child] > hp->_a[parent])
+    {
+      Swap(&hp->_a[parent],&hp->_a[child]);
+      child=parent;
+      parent =(child-1)/2;
+    }
+    else  
+      break;
+  }
+}
+
+
+  //插入向下调整 
+  void AdjustDown(Heap* hp)
+  {
+    assert(hp);
+    int root =0;
+    int child=root *2 +1;
+    while(child < hp->_size)
+    {
+      if(hp->_a[child] < hp->_a[child+1])
+        child++;
+      if(hp->_a[root] > hp->_a[child])
+      {
+        Swap(&hp->_a[child],&hp->_a[root]);
+        root =child;
+        child=root *2+1;
+      } else 
+        break;
+    }
+  }
+
+
+
+
+  // 堆的构建
+  void HeapCreate(Heap* hp, HPDataType* a, int n)
+  {
+    assert(hp && a);
+    if(n < hp->_capacity)
+    {
+      *hp->_a=*a;
+      hp->_size=n;
+    }
+    else 
+    {
+      hp->_a = (HPDataType*)realloc(hp->_a,n * sizeof(HPDataType));
+      hp->_capacity =n;
+      hp->_size=n;
+      *hp->_a=*a;
+    }
+  }
+  // 堆的销毁
+  void HeapDestory(Heap* hp)
+  {
+    free(hp->_a);
+    free(hp);
+    hp=NULL;
+  }
+  // 堆的插入
+  void HeapPush(Heap* hp, HPDataType x)
+  {
+    assert(hp);
+    if(hp->_capacity==hp->_size)
+    {
+      int newcapacity=2 * hp->_capacity;
+      hp->_a= (HPDataType*)realloc(hp->_a,newcapacity * sizeof(HPDataType));
+      hp->_capacity=newcapacity;
+    }
+    hp->_size=x;
+    hp->_size++;
+    AdjustUp(hp);
+  }
+  // 堆的删除
+  void HeapPop(Heap* hp)
+  {
+    assert(hp && hp->_size);
+    HPDataType tmp=hp->_a[0];
+    hp->_a[0]=hp->_a[hp->_size];
+    hp->_a[hp->_size]=tmp;
+    AdjustDown(hp);
+  }
+  // 取堆顶的数据
+  HPDataType HeapTop(Heap* hp)
+  {
+    assert(hp);
+    return hp->_a[0];
+  }
+  // 堆的数据个数
+  int HeapSize(Heap* hp)
+  {
+    assert(hp);
+    return hp->_size;
+  }
+  // 堆的判空
+  int HeapEmpty(Heap* hp)
+  {
+    assert(hp);
+    if(hp->_size==0)
+      return 0;
+    return hp->_size;
+  }
+
+  // 对数组进行堆排序
+  //
+  //我们来键个 大根堆
+  void HeapSort(int* a, int n)
+  {
+    assert(a);
+    //从倒数第一个非叶节点开始
+    int len =(n-1)/2;
+    // 大根堆 双亲结点 大于 子节点  
+    while(len)
+    {
+      if(len*2+2 == n)
+      {
+        if(a[len*2+1] >a[len*2+2])
+        {
+          Swap(&a[len*2+1],&a[len]);
+        }
+        else 
+        {
+          Swap(&a[len*2+2],&a[len]); 
+        }
+      }      
+      else 
+      {
+        if(a[len*2+1]>a[len])
+          Swap(&a[len*2+1],&a[len]);
+      }
+      --len;
+    }
+  }
+
+
+  int main ()
+  {
+    return 0;
+  }
+
