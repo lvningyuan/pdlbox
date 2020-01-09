@@ -1,0 +1,111 @@
+#include"stdio.h"
+#include"windows.h"
+#include "assert.h"
+#include"stdlib.h"
+#define N   10
+typedef int Type;
+typedef struct Seqlist
+{
+	Type a[10];
+	int  _size;//有效元素个数
+	//size_t _capacity;
+}list,*Seqlist;
+void Swap(Type* array, Type a, Type b);
+Type Testfind(const Seqlist s, const Type data);
+int  SeqlistBinaryfind(Seqlist s, Type data);
+void RemoveAll(Seqlist s, Type data);
+
+Type Testfind(const Seqlist s,const Type data) 
+{
+	assert(s);
+	for (int i = 0; i < s->_size; ++i)
+	{
+		if (s->a[i] == data)
+		{
+			printf("第一次找到了的位置下标为,\n");
+			return i;
+		}
+	}
+	printf("没找到\n");
+	return -1;
+}
+//二分查找  ： 设置左右标杆，一半又一半找
+int  SeqlistBinaryfind(Seqlist s,Type data) 
+{
+	assert(s);
+	size_t left = 0; size_t right = s->_size;
+	int mid = (right - left) >> 1;
+	//边界法则： 前开后开，前闭后闭
+	while (left<=right)//尽量加上等号，这样更安全
+	{
+		if (s->a[mid] == data)
+		{
+			printf("第一个找到的下标为:");
+			return mid;
+		}
+			if (s->a[mid] > data)
+			right = mid - 1;
+		if (s->a[mid] < data)
+			left = mid + 1;
+	}
+	printf("没找到\n");
+	return -1;//否则没找到
+}
+
+//要求时间复杂度O(n),空间复杂度O(1)
+void RemoveAll(Seqlist s, Type data)
+{
+	assert(s);
+	int tmp = 0;
+	int count = 0;
+	//我们设置两个临时变量同时出发，就像反向打印一句话的思想一样
+	size_t dst = 0;
+	size_t src = 0;
+	while (dst<s->_size && src <s->_size)
+	{
+		if (s->a[dst] == data)//先找目标要移除的数
+		{
+			if (s->a[src] != data)//找不等于data的数，准备
+			{
+				Swap(s->a, dst, src);
+				++src;
+				++dst;//交换后，保持同步
+				++tmp;//交换成功计数加一
+			}
+			else
+			{
+				++src;
+			}
+		}
+		else
+		{
+			++dst;
+			++src;
+			++tmp;//不是data计数加一
+		}
+	}
+	s->_size = tmp;//修改有效下表
+}
+void Swap(Type* array,Type a, Type b) 
+{
+	Type tmp=array[a];
+	array[a] = array[b];
+	array[b] = tmp;
+}
+void Test3() 
+{
+	list s = { {5,4,1,4,4,4,3,4},8}, *ps;
+	ps = &s;
+	 RemoveAll(ps,(int)4);
+	 for (size_t i = 0; i < ps->_size; ++i)
+		 printf(" %d\t", ps->a[i]);
+
+}
+int main()
+{
+	//Test1();
+
+	Test3();
+	system("pause");
+	return 0;
+}
