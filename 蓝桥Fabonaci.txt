@@ -1,0 +1,30 @@
+Fibonacci数列的递推公式为：Fn=Fn-1+Fn-2，其中F1=F2=1。
+
+当n比较大时，Fn也非常大，现在我们想知道，Fn除以10007的余数是多少。
+
+
+
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+	int n ;
+  long ret = 0;
+	int  tmp;
+	cin >> n;
+	
+	int t1 =1;
+	int t2 =1;
+	
+	for( int i = 1; i <= n;++i)
+	{
+		ret =  t1 % 10007;
+		tmp = t2;
+		t2 = (t1 + t2) % 10007;
+		t1 = tmp;
+	}
+	cout<<ret<<endl;
+	return 0;
+}
