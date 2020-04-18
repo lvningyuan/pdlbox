@@ -122,7 +122,7 @@ class MyThreadPool
         pthreadpool->ConsumeWait();
 
 
-          //2  线程池未启用，且任务队列为空 ，则退出本线程
+          //2  线程池未启用，且任务队列为空 ，则退出
           if(!pthreadpool->ThreadIsRunning()  &&  pthreadpool->QueueIsEmpty())
           {
               pthreadpool->ThreadUnlock();
@@ -135,7 +135,7 @@ class MyThreadPool
        
 
          // 能走到这里，说明下边这种情况成立
-        //while(pthreadpool->ThreadIsRunning() && pthreadpool->QueueIsEmpty())
+        //while(pthreadpool->ThreadIsRunning() && !pthreadpool->QueueIsEmpty())
         {
             MyTask* task;//输出型参数
             //获取任务
@@ -178,8 +178,8 @@ class MyThreadPool
             exit(0);
         }
 
-      //否则，创建成功 ，分离该创建成功的线程
-      pthread_detach(pthread_self());
+      //否则，创建成功 ，线程处理函数执行完自动回收资源    
+	  pthread_detach(pthread_self());
       }
   }
      
