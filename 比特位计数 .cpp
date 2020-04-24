@@ -15,7 +15,7 @@ public:
         {
             int x = i;
             int n=1;
-            while(x & x-1)
+            while(x & (x-1))
             {
                 ++n;
                 x = x & (x-1);
