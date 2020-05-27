@@ -17,7 +17,7 @@ public:
         int j =1;//奇数
         while (i<=len && j<=len)
         {
-            if(arr[len] %2 == 0)
+            if(arr[len] %2 == 0)//只注重看一位
             {
                 std::swap(arr[i], arr[len]);//当前最后一位是偶数
                 i += 2;
